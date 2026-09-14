@@ -77,7 +77,7 @@ def summarize(row: dict):
     total_cost=round(sum(x['estimated_cost_usd'] for x in row['legs']),2);total_co2=round(sum(x['estimated_co2e_kg'] for x in row['legs']),2)
     return {**row,'total_estimated_cost_usd':total_cost,'total_estimated_co2e_kg':total_co2,'has_disruption':any(x['disrupted'] for x in row['legs'])}
 
-@app.get('/')
+@app.get('/api/status')
 def root(): return {'system':'UNG-APEX','status':'online','version':VERSION}
 @app.get('/health')
 def health(): return {'status':'ok','service':'UNG-APEX','version':VERSION}
@@ -128,3 +128,7 @@ def compare_modes(leg: LegIn):
     results=[]
     for mode in sorted(MODES):results.append(enrich_leg(leg.model_copy(update={'mode':mode})))
     return {'origin':leg.origin,'destination':leg.destination,'distance_km':leg.distance_km,'cargo_tons':leg.cargo_tons,'alternatives':results}
+
+from pathlib import Path
+from ui_portal import install_ui
+install_ui(app, Path(__file__).with_name('ui') / 'index.html', None)

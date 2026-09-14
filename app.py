@@ -131,4 +131,7 @@ def compare_modes(leg: LegIn):
 
 from pathlib import Path
 from ui_portal import install_ui
-install_ui(app, Path(__file__).with_name('ui') / 'index.html', None)
+install_ui(app, Path(__file__).with_name('ui') / 'index.html', os.getenv('JANUS_BASE_URL','https://ung-iam-production.up.railway.app'))
+from access_control import install_access_control
+install_access_control(app)
+
